@@ -90,7 +90,7 @@ class NearestPointFinderImpl : NearestPointFinder {
         for (i in ids) {
             if ((points[i].x - middleX) * (points[i].x - middleX) < bestDistance) {
                 for (j in closeIds.asReversed()) {
-                    if ((points[i].x - points[j].x) * (points[i].x - points[j].x) > bestDistance)
+                    if ((points[i].y - points[j].y) * (points[i].y - points[j].y) > bestDistance)
                         break
 
                     updateBest(i, j)
