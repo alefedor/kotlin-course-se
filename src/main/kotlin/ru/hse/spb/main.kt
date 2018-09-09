@@ -1,6 +1,5 @@
 package ru.hse.spb
 
-import java.io.*
 import java.util.*
 import kotlin.math.abs
 
@@ -61,10 +60,11 @@ class NearestPointFinderImpl : NearestPointFinder {
     private fun recursiveFind(ids : MutableList<Int>) {
         if (ids.size < MINIMUM_DIVIDE_SIZE) {
             for (a in ids) {
-                for (b in ids)
+                for (b in ids) {
                     if (a != b) {
                         updateBest(a, b)
                     }
+                }
             }
 
             Collections.sort(ids, yComparator)
