@@ -157,45 +157,47 @@ data class QueryResult(val i : Int, val k1 : Int, val j : Int, val k2 : Int)
  */
 class Solver {
 
-    /**
-     * Function for finding minimum vector sum
-     * @param points list of vectors
-     */
-    fun solve(points : List<Point>) : QueryResult {
-        val absolutePoints = points.map { p -> abs(p) }
+    companion object {
+        /**
+         * Function for finding minimum vector sum
+         * @param points list of vectors
+         */
+        fun solve(points : List<Point>) : QueryResult {
+            val absolutePoints = points.map { p -> abs(p) }
 
-        val pointFinder = NearestPointFinderImpl()
+            val pointFinder = NearestPointFinderImpl()
 
-        val pair = pointFinder.findNearestPoints(absolutePoints.toMutableList())
+            val pair = pointFinder.findNearestPoints(absolutePoints.toMutableList())
 
-        val firstReflection = getReflection(points[pair.first], absolutePoints[pair.first])
+            val firstReflection = getReflection(points[pair.first], absolutePoints[pair.first])
 
-        val inversePoint = Point(-absolutePoints[pair.second].x, -absolutePoints[pair.second].y)
+            val inversePoint = Point(-absolutePoints[pair.second].x, -absolutePoints[pair.second].y)
 
-        val secondReflection = getReflection(points[pair.second], inversePoint)
+            val secondReflection = getReflection(points[pair.second], inversePoint)
 
-        return QueryResult(pair.first, firstReflection, pair.second, secondReflection)
-    }
-
-    private fun abs(p : Point) = Point(abs(p.x), abs(p.y))
-
-    private fun getReflection(base : Point, p : Point) : Int {
-        var result = 1
-
-        if (p.x != base.x) {
-            result++
+            return QueryResult(pair.first, firstReflection, pair.second, secondReflection)
         }
 
-        if (p.y != base.y) {
-            result += 2
-        }
+        private fun abs(p : Point) = Point(abs(p.x), abs(p.y))
 
-        return result
+        private fun getReflection(base : Point, p : Point) : Int {
+            var result = 1
+
+            if (p.x != base.x) {
+                result++
+            }
+
+            if (p.y != base.y) {
+                result += 2
+            }
+
+            return result
+        }
     }
 }
 
 /**
- * Read integer 2D point using scanner
+ * Read integer 2D points using scanner
  */
 fun readPoints(scanner : Scanner) : List<Point> {
     val n = scanner.nextInt()
@@ -213,11 +215,9 @@ fun readPoints(scanner : Scanner) : List<Point> {
 
 
 fun main(args: Array<String>) {
-    val solver = Solver()
-
     val points = readPoints(Scanner(System.`in`))
 
-    val queryResult = solver.solve(points)
+    val queryResult = Solver.solve(points)
 
     print("${queryResult.i + 1} ${queryResult.k1} ${queryResult.j + 1} ${queryResult.k2}")
 }

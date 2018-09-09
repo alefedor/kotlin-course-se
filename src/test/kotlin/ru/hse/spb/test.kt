@@ -21,9 +21,7 @@ class TestSource {
         val points = mutableListOf<Point>(Point(-7, -3), Point(9, 0),
                                         Point(-8, 6), Point(7, -8), Point(4, -5))
 
-        val solver = Solver()
-
-        val queryResult = solver.solve(points)
+        val queryResult = Solver.solve(points)
         assertTrue(queryResult.i in 0..4)
         assertTrue(queryResult.k1 in 1..4)
         assertTrue(queryResult.j in 0..4)
@@ -41,10 +39,8 @@ class TestSource {
     fun test2() {
         val points = mutableListOf<Point>(Point(3, 2), Point(-4, 7),
                 Point(-6, 0), Point(-8, 4), Point(5, 1))
-
-        val solver = Solver()
-
-        val queryResult = solver.solve(points)
+        
+        val queryResult = Solver.solve(points)
         assertTrue(queryResult.i in 0..4)
         assertTrue(queryResult.k1 in 1..4)
         assertTrue(queryResult.j in 0..4)
