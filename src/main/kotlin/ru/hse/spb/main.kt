@@ -38,10 +38,12 @@ class NearestPointFinderImpl : NearestPointFinder {
     private var id2 = -1
     private var points = emptyList<Point>()
 
-    private val MINIMUM_DIVIDE_SIZE = 20
-
     private val xComparator  = Comparator<Int> { a: Int, b: Int -> points[a].x - points[b].x}
     private val yComparator  = Comparator<Int> { a: Int, b: Int -> points[a].y - points[b].y}
+
+    companion object {
+        private val MINIMUM_DIVIDE_SIZE = 20
+    }
 
     override fun findNearestPoints(ps : List<Point>) : Pair<Int, Int> {
         invalidateBest()
@@ -90,8 +92,9 @@ class NearestPointFinderImpl : NearestPointFinder {
         for (i in ids) {
             if ((points[i].x - middleX) * (points[i].x - middleX) < bestDistance) {
                 for (j in closeIds.asReversed()) {
-                    if ((points[i].y - points[j].y) * (points[i].y - points[j].y) > bestDistance)
+                    if ((points[i].y - points[j].y) * (points[i].y - points[j].y) > bestDistance) {
                         break
+                    }
 
                     updateBest(i, j)
                 }
