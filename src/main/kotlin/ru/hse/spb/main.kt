@@ -170,7 +170,7 @@ class Solver {
 
             val pointFinder = NearestPointFinderImpl()
 
-            val pair = pointFinder.findNearestPoints(absolutePoints.toMutableList())
+            val pair = pointFinder.findNearestPoints(absolutePoints)
 
             val firstReflection = getReflection(points[pair.first], absolutePoints[pair.first])
 
