@@ -19,7 +19,6 @@ fun squareDistance(a : Point, b : Point) = (a.x - b.x) * (a.x - b.x) + (a.y - b.
  * Interface for solver of problem of finding two nearest points in 2D
  */
 interface NearestPointFinder {
-
     /**
      * Function for finding two nearest points in 2D
      * @param ps list of points in 2D
@@ -158,45 +157,43 @@ data class QueryResult(val i : Int, val k1 : Int, val j : Int, val k2 : Int)
 /**
  * Class for solving problem minimum vector sum with possibility of 90-angled turns
  */
-class Solver {
+object Solver {
+    /**
+     * Function for finding minimum vector sum
+     * @param points list of vectors
+     */
+    fun solve(points : List<Point>) : QueryResult {
+        val absolutePoints = points.map { p -> abs(p) }
 
-    companion object {
-        /**
-         * Function for finding minimum vector sum
-         * @param points list of vectors
-         */
-        fun solve(points : List<Point>) : QueryResult {
-            val absolutePoints = points.map { p -> abs(p) }
+        val pointFinder = NearestPointFinderImpl()
 
-            val pointFinder = NearestPointFinderImpl()
+        val pair = pointFinder.findNearestPoints(absolutePoints)
 
-            val pair = pointFinder.findNearestPoints(absolutePoints)
+        val firstReflection = getReflection(points[pair.first], absolutePoints[pair.first])
 
-            val firstReflection = getReflection(points[pair.first], absolutePoints[pair.first])
+        val inversePoint = Point(-absolutePoints[pair.second].x, -absolutePoints[pair.second].y)
 
-            val inversePoint = Point(-absolutePoints[pair.second].x, -absolutePoints[pair.second].y)
+        val secondReflection = getReflection(points[pair.second], inversePoint)
 
-            val secondReflection = getReflection(points[pair.second], inversePoint)
-
-            return QueryResult(pair.first, firstReflection, pair.second, secondReflection)
-        }
-
-        private fun abs(p : Point) = Point(abs(p.x), abs(p.y))
-
-        private fun getReflection(base : Point, p : Point) : Int {
-            var result = 1
-
-            if (p.x != base.x) {
-                result++
-            }
-
-            if (p.y != base.y) {
-                result += 2
-            }
-
-            return result
-        }
+        return QueryResult(pair.first, firstReflection, pair.second, secondReflection)
     }
+
+    private fun abs(p : Point) = Point(abs(p.x), abs(p.y))
+
+    private fun getReflection(base : Point, p : Point) : Int {
+        var result = 1
+
+        if (p.x != base.x) {
+            result++
+        }
+
+        if (p.y != base.y) {
+            result += 2
+        }
+
+        return result
+    }
+
 }
 
 /**
