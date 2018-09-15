@@ -4,7 +4,7 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class TestSource {
-    fun applyReflection(p : Point, r : Int) : Point {
+    fun applyReflection(p: Point, r: Int): Point {
         when (r) {
             1 -> return p
             2 -> return Point(-p.x, p.y)
