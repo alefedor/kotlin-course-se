@@ -43,7 +43,7 @@ fun ExpParser.LoopContext.toASTNode() = While(expression().toASTNode(), blockWit
 fun ExpParser.ConditionContext.toASTNode() = If(
                                                  expression().toASTNode(),
                                                  mainBlock.toASTNode(),
-                                         elseBlock?.toASTNode() ?: Block(emptyList())
+                                                 elseBlock?.toASTNode() ?: Block(emptyList())
                                              )
 
 fun ExpParser.AssigmentContext.toASTNode() = Assigment(Identifier().toIdentifier(), expression().toASTNode())
