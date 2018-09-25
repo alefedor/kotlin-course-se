@@ -3,43 +3,43 @@ package ru.hse.spb
 import java.util.function.BinaryOperator
 import java.util.function.IntBinaryOperator
 
-interface ASTNode;
+interface ASTNode
 
-class Block(val statements: List<Statement>) : ASTNode
+data class Block(val statements: List<Statement>) : ASTNode
 
-interface Statement : ASTNode
+sealed class Statement : ASTNode
 
-class Function(val name: Identifier, val params: ParameterNames, val body: Block) : Statement
+data class Function(val name: Identifier, val params: ParameterNames, val body: Block) : Statement()
 
-class Variable(val name: Identifier, val value: Expression) : Statement
+data class Variable(val name: Identifier, val value: Expression) : Statement()
 
-class ParameterNames(val params: List<Identifier>) : ASTNode
+data class ParameterNames(val params: List<Identifier>) : ASTNode
 
-class While(val condition: Expression, val body: Block) : Statement
+data class While(val condition: Expression, val body: Block) : Statement()
 
-class If(val condition: Expression, val body: Block, val elseBody: Block = Block(emptyList())) : Statement
+data class If(val condition: Expression, val body: Block, val elseBody: Block = Block(emptyList())) : Statement()
 
-class Assigment(val name: Identifier, val value: Expression) : Statement
+data class Assigment(val name: Identifier, val value: Expression) : Statement()
 
-class Return(val value: Expression) : Statement
+data class Return(val value: Expression) : Statement()
 
-interface Expression : Statement
+sealed class Expression : Statement()
 
-class FunctionCall(val name: Identifier, val args: Arguments) : Expression
+data class FunctionCall(val name: Identifier, val args: Arguments) : Expression()
 
-class Arguments(val values: List<Expression>) : ASTNode
+data class Arguments(val values: List<Expression>) : ASTNode
 
-class Identifier(val name: String) : Expression {
+data class Identifier(val name: String) : Expression() {
     override fun toString(): String {
         return name
     }
 }
 
-class Literal(val value: Int) : Expression
+data class Literal(val value: Int) : Expression()
 
 fun Boolean.toInt() = if (this) 1 else 0
 
-class BinaryExpression(val left: Expression, val op: Operator, val right: Expression) : Expression {
+data class BinaryExpression(val left: Expression, val op: Operator, val right: Expression) : Expression() {
     enum class Operator : BinaryOperator<Int>, IntBinaryOperator {
         PLUS {
             override fun apply(a: Int, b: Int) = a + b

@@ -45,9 +45,9 @@ arguments : (expression ',')* expression ;
 
 Identifier : ('a'..'z' | 'A'..'Z') ('a'..'z' | 'A'..'Z' | '0'..'9')* ;
 
-Literal : '-'? ('1'..'9') ('0'..'9')* | '0';
+Literal : ('1'..'9') ('0'..'9')* | '0' ;
 
-SKIP_SYMBOLS : (' ' | '\t' | '\r'| '\n' | '//' (.)*? '\n') -> skip ;
+SKIP_SYMBOLS : (' ' | '\t' | '\r' | '\n' | '//' (.)*? '\n') -> skip ;
 
 PLUS : '+' ;
 MINUS : '-' ;

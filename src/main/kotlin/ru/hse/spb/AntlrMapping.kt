@@ -27,7 +27,7 @@ fun TerminalNode.toLiteral() = Literal(text.toInt())
 
 fun ExpParser.FunctionContext.toASTNode() = Function(
                                                 Identifier().toIdentifier(),
-                                                parameterNames().toASTNode(),
+                                                parameterNames()?.toASTNode() ?: ParameterNames(emptyList()),
                                                 blockWithBrackets().toASTNode()
                                             )
 

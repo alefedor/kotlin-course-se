@@ -14,7 +14,7 @@ fun main(args: Array<String>) {
 
     val fileName = args[0]
     val lines = Files.readAllLines(Paths.get(fileName))
-    val code = lines.stream().collect(Collectors.joining("\n")) + "\n"
+    val code = lines.stream().collect(Collectors.joining("\n"))
 
     try {
         val root = Parser.parse(code)

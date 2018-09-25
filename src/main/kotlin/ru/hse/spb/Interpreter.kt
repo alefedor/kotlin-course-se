@@ -51,10 +51,10 @@ object Interpreter {
 
         val ifScope = Scope(scope)
 
-        if (value != 0) {
-            return evaluate(condition.body, ifScope)
+        return if (value != 0) {
+            evaluate(condition.body, ifScope)
         } else {
-            return evaluate(condition.elseBody, ifScope)
+            evaluate(condition.elseBody, ifScope)
         }
     }
 
@@ -80,7 +80,6 @@ object Interpreter {
         is Assigment -> { evaluate(statement, scope); null }
         is FunctionCall -> { evaluate(statement, scope); null }
         is Return -> evaluate(statement, scope)
-        else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
     }
 
     private fun evaluate(function: Function, scope: Scope) {
@@ -93,13 +92,12 @@ object Interpreter {
             val functionScope = Scope(scope)
 
             for (i in 0 until it.size) {
-                body.add(Variable(function.params.params.get(i), Literal(it.get(i))))
+                body.add(Variable(function.params.params[i], Literal(it[i])))
             }
 
             body.addAll(function.body.statements)
-            val result = evaluate(Block(body), functionScope)
 
-            if (result != null) result else 0
+            evaluate(Block(body), functionScope) ?: 0
         }
     }
 
@@ -112,6 +110,5 @@ object Interpreter {
             val right = evaluate(expression.right, scope)
             expression.op.apply(left, right)
         }
-        else -> throw UnsupportedOperationException(this.javaClass.canonicalName)
     }
 }

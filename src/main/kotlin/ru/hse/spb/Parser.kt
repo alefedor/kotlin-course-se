@@ -8,7 +8,7 @@ class ParserException(message: String) : Exception(message)
 
 object Parser {
     fun parse(code: String) : Block {
-        val lexer = ExpLexer(CharStreams.fromString(code))
+        val lexer = ExpLexer(CharStreams.fromString(code + "\n"))
         val parser = ExpParser(BufferedTokenStream(lexer))
 
         lexer.addErrorListener(object : BaseErrorListener() {
@@ -20,7 +20,7 @@ object Parser {
                     msg: String?,
                     e: RecognitionException?
             ) {
-                throw ParserException("Lexer exception at ${line}:${charPositionInLine}.")
+                throw ParserException("Lexer exception at $line:$charPositionInLine.")
             }
         })
 
@@ -33,7 +33,7 @@ object Parser {
                     msg: String?,
                     e: RecognitionException?
             ) {
-                throw ParserException("Parser exception at ${line}:${charPositionInLine}.")
+                throw ParserException("Parser exception at $line:$charPositionInLine.")
             }
         })
 
