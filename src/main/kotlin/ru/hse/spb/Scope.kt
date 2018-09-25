@@ -8,7 +8,7 @@ class Scope(private val parent: Scope? = null){
 
     companion object {
         val STD_FUNCTIONS = mapOf<String, IntFunction>(
-                "println" to {args -> println(args.joinToString(" ")); 0}
+                "println" to { args -> println(args.joinToString(" ")); 0 }
         )
     }
 
