@@ -4,7 +4,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class InterpreterTest {
-    fun mockedStl(output: StringBuilder) : Map<String, IntFunction> = mapOf<String, IntFunction>(
+    fun mockedStl(output: StringBuilder): Map<String, IntFunction> = mapOf<String, IntFunction>(
                 "println" to { args -> output.append(args.joinToString(" ") + "\n"); 0 }
     )
 

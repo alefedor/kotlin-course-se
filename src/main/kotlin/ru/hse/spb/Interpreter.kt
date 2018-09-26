@@ -9,7 +9,7 @@ object Interpreter {
         evaluate(code, std)
     }
 
-    private fun evaluate(block: Block, scope: Scope) : Int? {
+    private fun evaluate(block: Block, scope: Scope): Int? {
         for (statement in block.statements) {
             val result = evaluate(statement, scope)
 
@@ -31,22 +31,22 @@ object Interpreter {
         scope.setVariable(assigment.name.toString(), value)
     }
 
-    private fun evaluate(ret: Return, scope: Scope) : Int {
+    private fun evaluate(ret: Return, scope: Scope): Int {
         return evaluate(ret.value, scope)
     }
 
-    private fun evaluate(functionCall: FunctionCall, scope: Scope) : Int {
+    private fun evaluate(functionCall: FunctionCall, scope: Scope): Int {
         val function = scope.getFunction(functionCall.name.toString())
         val functionScope = Scope(scope)
         val args = evaluate(functionCall.args, functionScope)
         return function.invoke(args)
     }
 
-    private fun evaluate(arguments: Arguments, scope: Scope) : List<Int> {
+    private fun evaluate(arguments: Arguments, scope: Scope): List<Int> {
         return arguments.values.map { evaluate(it, scope)}
     }
 
-    private fun evaluate(condition: If, scope: Scope) : Int? {
+    private fun evaluate(condition: If, scope: Scope): Int? {
         val value = evaluate(condition.condition, scope)
 
         val ifScope = Scope(scope)
@@ -58,7 +58,7 @@ object Interpreter {
         }
     }
 
-    private fun evaluate(loop: While, scope: Scope) : Int? {
+    private fun evaluate(loop: While, scope: Scope): Int? {
         while (evaluate(loop.condition, scope) != 0) {
             val whileScope = Scope(scope)
             val result = evaluate(loop.body, whileScope)
@@ -71,7 +71,7 @@ object Interpreter {
         return null
     }
 
-    private fun evaluate(statement: Statement, scope: Scope) : Int? = when (statement) {
+    private fun evaluate(statement: Statement, scope: Scope): Int? = when (statement) {
         is If -> evaluate(statement, scope)
         is While -> evaluate(statement, scope)
         is Expression -> { evaluate(statement, scope); null }
@@ -101,7 +101,7 @@ object Interpreter {
         }
     }
 
-    private fun evaluate(expression: Expression, scope: Scope) : Int = when (expression) {
+    private fun evaluate(expression: Expression, scope: Scope): Int = when (expression) {
         is Literal -> expression.value
         is Identifier -> scope.getVariable(expression.name)
         is FunctionCall -> evaluate(expression, scope)

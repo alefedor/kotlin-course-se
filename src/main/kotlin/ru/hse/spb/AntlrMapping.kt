@@ -7,7 +7,7 @@ fun ExpParser.FileContext.toASTNode() = block().toASTNode()
 
 fun ExpParser.BlockContext.toASTNode() = Block(this.statement().map { it.toASTNode()})
 
-fun ExpParser.BlockWithBracketsContext.toASTNode() : Block = block().toASTNode()
+fun ExpParser.BlockWithBracketsContext.toASTNode(): Block = block().toASTNode()
 
 fun ExpParser.StatementContext.toASTNode() = when (this) {
     is ExpParser.FunctionStatementContext -> function().toASTNode()
@@ -54,7 +54,7 @@ fun ExpParser.FunctionCallContext.toASTNode() = FunctionCall(Identifier().toIden
 
 fun ExpParser.ArgumentsContext.toASTNode() = Arguments(expression().map {it.toASTNode()})
 
-fun ExpParser.ExpressionContext.toASTNode() : Expression = when (this) {
+fun ExpParser.ExpressionContext.toASTNode(): Expression = when (this) {
     is ExpParser.BinaryOperationContext -> BinaryExpression(
                                                left.toASTNode(),
                                                op.text.toOperator(),

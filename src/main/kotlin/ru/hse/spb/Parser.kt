@@ -7,7 +7,7 @@ import ru.hse.spb.parser.ExpParser
 class ParserException(message: String) : Exception(message)
 
 object Parser {
-    fun parse(code: String) : Block {
+    fun parse(code: String): Block {
         val lexer = ExpLexer(CharStreams.fromString(code + "\n"))
         val parser = ExpParser(BufferedTokenStream(lexer))
 

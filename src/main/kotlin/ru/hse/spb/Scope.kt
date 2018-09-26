@@ -29,7 +29,7 @@ class Scope(private val parent: Scope? = null){
         findVariableScope(name)[name] = value
     }
 
-    fun getVariable(name: String) : Int = findVariableScope(name)[name]!!
+    fun getVariable(name: String): Int = findVariableScope(name)[name]!!
 
     fun declareFunction(name: String, body: IntFunction) {
         if (functions.containsKey(name)) {
@@ -39,9 +39,9 @@ class Scope(private val parent: Scope? = null){
         functions[name] = body
     }
 
-    fun getFunction(name: String) : IntFunction = findFunctionScope(name)[name]!!
+    fun getFunction(name: String): IntFunction = findFunctionScope(name)[name]!!
 
-    private fun findVariableScope(name: String) : MutableMap<String, Int> {
+    private fun findVariableScope(name: String): MutableMap<String, Int> {
         if (variables.containsKey(name)) {
             return variables
         }
@@ -53,7 +53,7 @@ class Scope(private val parent: Scope? = null){
         throw InterpreterException("No such variable $name in scope")
     }
 
-    private fun findFunctionScope(name: String) : MutableMap<String, IntFunction> {
+    private fun findFunctionScope(name: String): MutableMap<String, IntFunction> {
         if (functions.containsKey(name)) {
             return functions
         }
