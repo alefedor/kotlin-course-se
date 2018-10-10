@@ -27,7 +27,6 @@ enum class Alignment(val alignment: String) {
 }
 
 open class CommonElement(wrapper: IndentationWrapper, append: (String) -> Unit) : IndentedElement(wrapper, append) {
-
     fun customTag(name: String, vararg params: Pair<String, String>, body: CommonElement.() -> Unit) {
         appendIndented("""\begin{$name}""")
 
@@ -64,27 +63,20 @@ open class CommonElement(wrapper: IndentationWrapper, append: (String) -> Unit) 
         endLine()
     }
 
-    fun itemize(body: ItemElement.() -> Unit) {
-        appendIndented("""\begin{itemize}""")
-        endLine()
-
-        val itemizeElement = ItemElement(IndentationWrapper(wrapper.level + 1), append)
-        itemizeElement.body()
-
-        appendIndented("""\end{itemize}""")
-        endLine()
-    }
-
-    fun enumerate(body: ItemElement.() -> Unit) {
-        appendIndented("""\begin{enumerate}""")
+    private fun buildItemElement(name: String, body: ItemElement.() -> Unit) {
+        appendIndented("""\begin{$name}""")
         endLine()
 
         val itemElement = ItemElement(IndentationWrapper(wrapper.level + 1), append)
         itemElement.body()
 
-        appendIndented("""\end{enumerate}""")
+        appendIndented("""\end{$name}""")
         endLine()
     }
+
+    fun itemize(body: ItemElement.() -> Unit) = buildItemElement("itemize", body)
+
+    fun enumerate(body: ItemElement.() -> Unit) = buildItemElement("enumerate", body)
 
     operator fun String.unaryPlus() {
         appendIndented(this)
