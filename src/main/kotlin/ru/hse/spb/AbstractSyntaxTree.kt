@@ -40,7 +40,7 @@ data class Literal(val value: Int) : Expression()
 fun Boolean.toInt() = if (this) 1 else 0
 
 data class BinaryExpression(val left: Expression, val op: Operator, val right: Expression) : Expression() {
-    enum class Operator(val op: (Int, Int) -> Int) : BinaryOperator<Int>, IntBinaryOperator {
+    enum class Operator(private val op: (Int, Int) -> Int) : BinaryOperator<Int>, IntBinaryOperator {
         PLUS({ a, b -> a + b }),
         MINUS({ a, b -> a - b }),
         MULT({ a, b -> a * b }),
@@ -55,8 +55,8 @@ data class BinaryExpression(val left: Expression, val op: Operator, val right: E
         OR(({ a, b -> (a != 0 || b != 0).toInt() })),
         AND(({ a, b -> (a != 0 && b != 0).toInt() }));
 
-        override fun apply(a: Int, b: Int) = op(a, b)
-        override fun applyAsInt(a: Int, b: Int) = apply(a, b)
+        override fun apply(a: Int, b: Int) = applyAsInt(a, b)
+        override fun applyAsInt(a: Int, b: Int) = op(a, b)
     }
 }
 
