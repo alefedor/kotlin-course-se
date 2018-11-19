@@ -1,8 +1,6 @@
 package ru.hse.spb
 
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.util.stream.Collectors
+import java.io.File
 
 fun main(args: Array<String>) {
     if (args.size != 1) {
@@ -12,9 +10,7 @@ fun main(args: Array<String>) {
         return
     }
 
-    val fileName = args[0]
-    val lines = Files.readAllLines(Paths.get(fileName))
-    val code = lines.stream().collect(Collectors.joining("\n"))
+    val code = File(args[0]).readText()
 
     try {
         val root = Parser.parse(code)

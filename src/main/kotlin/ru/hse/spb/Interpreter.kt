@@ -83,16 +83,16 @@ object Interpreter {
     }
 
     private fun evaluate(function: Function, scope: Scope) {
-        scope.declareFunction(function.name.toString()) {
-            if (it.size != function.params.params.size) {
+        scope.declareFunction(function.name.toString()) { args ->
+            if (args.size != function.params.params.size) {
                 throw InterpreterException("Wrong number of arguments in function call")
             }
 
             val body = mutableListOf<Statement>()
             val functionScope = Scope(scope)
 
-            for (i in 0 until it.size) {
-                body.add(Variable(function.params.params[i], Literal(it[i])))
+            for ((i, arg) in args.withIndex()) {
+                body.add(Variable(function.params.params[i], Literal(arg)))
             }
 
             body.addAll(function.body.statements)

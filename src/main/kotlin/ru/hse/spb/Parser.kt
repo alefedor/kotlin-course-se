@@ -19,9 +19,7 @@ object Parser {
                     charPositionInLine: Int,
                     msg: String?,
                     e: RecognitionException?
-            ) {
-                throw ParserException("Lexer exception at $line:$charPositionInLine.")
-            }
+            ) = throw ParserException("Lexer exception at $line:$charPositionInLine.")
         })
 
         parser.addErrorListener(object : BaseErrorListener() {
@@ -32,9 +30,7 @@ object Parser {
                     charPositionInLine: Int,
                     msg: String?,
                     e: RecognitionException?
-            ) {
-                throw ParserException("Parser exception at $line:$charPositionInLine.")
-            }
+            ) = throw ParserException("Parser exception at $line:$charPositionInLine.")
         })
 
         return parser.file().toASTNode()

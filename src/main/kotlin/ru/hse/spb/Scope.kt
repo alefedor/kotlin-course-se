@@ -8,7 +8,7 @@ class Scope(private val parent: Scope? = null){
 
     companion object {
         val STD_FUNCTIONS = mapOf<String, IntFunction>(
-                "println" to { args -> println(args.joinToString(" ")); 0 }
+            "println" to { args -> println(args.joinToString(" ")); 0 }
         )
     }
 
@@ -18,7 +18,7 @@ class Scope(private val parent: Scope? = null){
     }
 
     fun declareVariable(name: String, value: Int) {
-        if (variables.containsKey(name)) {
+        if (name in variables) {
             throw InterpreterException("There is already variable $name declared in the scope")
         }
 
@@ -32,7 +32,7 @@ class Scope(private val parent: Scope? = null){
     fun getVariable(name: String): Int = findVariableScope(name)[name]!!
 
     fun declareFunction(name: String, body: IntFunction) {
-        if (functions.containsKey(name)) {
+        if (name in functions) {
             throw InterpreterException("There is already function $name declared in the scope")
         }
 
@@ -42,26 +42,18 @@ class Scope(private val parent: Scope? = null){
     fun getFunction(name: String): IntFunction = findFunctionScope(name)[name]!!
 
     private fun findVariableScope(name: String): MutableMap<String, Int> {
-        if (variables.containsKey(name)) {
+        if (name in variables) {
             return variables
         }
 
-        if (parent != null) {
-            return parent.findVariableScope(name)
-        }
-
-        throw InterpreterException("No such variable $name in scope")
+        return parent?.findVariableScope(name) ?: throw InterpreterException("No such variable $name in scope")
     }
 
     private fun findFunctionScope(name: String): MutableMap<String, IntFunction> {
-        if (functions.containsKey(name)) {
+        if (name in functions) {
             return functions
         }
 
-        if (parent != null) {
-            return parent.findFunctionScope(name)
-        }
-
-        throw InterpreterException("No such function $name in scope")
+        return parent?.findFunctionScope(name) ?: throw InterpreterException("No such function $name in scope")
     }
 }

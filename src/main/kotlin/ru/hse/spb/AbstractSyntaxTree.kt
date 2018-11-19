@@ -3,17 +3,17 @@ package ru.hse.spb
 import java.util.function.BinaryOperator
 import java.util.function.IntBinaryOperator
 
-interface ASTNode
+sealed class ASTNode
 
-data class Block(val statements: List<Statement>) : ASTNode
+data class Block(val statements: List<Statement>) : ASTNode()
 
-sealed class Statement : ASTNode
+sealed class Statement : ASTNode()
 
 data class Function(val name: Identifier, val params: ParameterNames, val body: Block) : Statement()
 
 data class Variable(val name: Identifier, val value: Expression) : Statement()
 
-data class ParameterNames(val params: List<Identifier>) : ASTNode
+data class ParameterNames(val params: List<Identifier>) : ASTNode()
 
 data class While(val condition: Expression, val body: Block) : Statement()
 
@@ -27,7 +27,7 @@ sealed class Expression : Statement()
 
 data class FunctionCall(val name: Identifier, val args: Arguments) : Expression()
 
-data class Arguments(val values: List<Expression>) : ASTNode
+data class Arguments(val values: List<Expression>) : ASTNode()
 
 data class Identifier(val name: String) : Expression() {
     override fun toString(): String {
@@ -40,47 +40,22 @@ data class Literal(val value: Int) : Expression()
 fun Boolean.toInt() = if (this) 1 else 0
 
 data class BinaryExpression(val left: Expression, val op: Operator, val right: Expression) : Expression() {
-    enum class Operator : BinaryOperator<Int>, IntBinaryOperator {
-        PLUS {
-            override fun apply(a: Int, b: Int) = a + b
-        },
-        MINUS {
-            override fun apply(a: Int, b: Int) = a - b
-        },
-        MULT {
-            override fun apply(a: Int, b: Int) = a * b
-        },
-        DIV {
-            override fun apply(a: Int, b: Int) = a / b
-        },
-        MOD {
-            override fun apply(a: Int, b: Int) = a % b
-        },
-        GT {
-            override fun apply(a: Int, b: Int) = (a > b).toInt()
-        },
-        LT {
-            override fun apply(a: Int, b: Int) = (a < b).toInt()
-        },
-        GEQ {
-            override fun apply(a: Int, b: Int) = (a >= b).toInt()
-        },
-        LEQ {
-            override fun apply(a: Int, b: Int) = (a <= b).toInt()
-        },
-        EQ {
-            override fun apply(a: Int, b: Int) = (a == b).toInt()
-        },
-        NEQ {
-            override fun apply(a: Int, b: Int) = (a != b).toInt()
-        },
-        OR {
-            override fun apply(a: Int, b: Int) = (a != 0 || b != 0).toInt()
-        },
-        AND {
-            override fun apply(a: Int, b: Int) = (a != 0 && b != 0).toInt()
-        };
+    enum class Operator(val op: (Int, Int) -> Int) : BinaryOperator<Int>, IntBinaryOperator {
+        PLUS({ a, b -> a + b }),
+        MINUS({ a, b -> a - b }),
+        MULT({ a, b -> a * b }),
+        DIV({ a, b -> a / b }),
+        MOD(({ a, b -> a % b })),
+        GT(({ a, b -> (a > b).toInt() })),
+        LT(({ a, b -> (a < b).toInt() })),
+        GEQ(({ a, b -> (a >= b).toInt() })),
+        LEQ(({ a, b -> (a <= b).toInt() })),
+        EQ(({ a, b -> (a == b).toInt() })),
+        NEQ(({ a, b -> (a != b).toInt() })),
+        OR(({ a, b -> (a != 0 || b != 0).toInt() })),
+        AND(({ a, b -> (a != 0 && b != 0).toInt() }));
 
+        override fun apply(a: Int, b: Int) = op(a, b)
         override fun applyAsInt(a: Int, b: Int) = apply(a, b)
     }
 }

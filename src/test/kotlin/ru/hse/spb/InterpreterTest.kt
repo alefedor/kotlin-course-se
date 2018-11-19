@@ -5,7 +5,7 @@ import org.junit.Test
 
 class InterpreterTest {
     fun mockedStl(output: StringBuilder): Map<String, IntFunction> = mapOf<String, IntFunction>(
-                "println" to { args -> output.append(args.joinToString(" ") + "\n"); 0 }
+        "println" to { args -> output.append(args.joinToString(" ") + "\n"); 0 }
     )
 
     @Test
@@ -20,17 +20,19 @@ class InterpreterTest {
     fun testInterpretNoOutput() {
         val output = StringBuilder()
         val stl = mockedStl(output)
-        val block = Block(listOf(
+        val block = Block(
+            listOf(
                 Variable(Identifier("a"), Literal(0)),
                 Assigment(
-                        Identifier("a"),
-                        BinaryExpression(
-                                Literal(3),
-                                BinaryExpression.Operator.MULT,
-                                Literal(5)
-                        )
+                    Identifier("a"),
+                    BinaryExpression(
+                        Literal(3),
+                        BinaryExpression.Operator.MULT,
+                        Literal(5)
+                    )
                 )
-        ))
+            )
+        )
 
         Interpreter.run(block, stl)
         assertEquals("", output.toString())
@@ -40,12 +42,14 @@ class InterpreterTest {
     fun testInterpretSinglePrintln() {
         val output = StringBuilder()
         val stl = mockedStl(output)
-        val block = Block(listOf(
+        val block = Block(
+            listOf(
                 FunctionCall(
-                        Identifier("println"),
-                        Arguments(listOf(Literal(2), Literal(3), Literal(9)))
+                    Identifier("println"),
+                    Arguments(listOf(Literal(2), Literal(3), Literal(9)))
                 )
-        ))
+            )
+        )
 
         Interpreter.run(block, stl)
         assertEquals("2 3 9\n", output.toString())
@@ -55,20 +59,26 @@ class InterpreterTest {
     fun testInterpretMultiplePrintln() {
         val output = StringBuilder()
         val stl = mockedStl(output)
-        val block = Block(listOf(
+        val block = Block(
+            listOf(
                 FunctionCall(
-                        Identifier("println"),
-                        Arguments(listOf(Literal(2), Literal(3), Literal(9)))
+                    Identifier("println"),
+                    Arguments(listOf(Literal(2), Literal(3), Literal(9)))
                 ),
                 FunctionCall(
-                        Identifier("println"),
-                        Arguments(listOf(BinaryExpression(
+                    Identifier("println"),
+                    Arguments(
+                        listOf(
+                            BinaryExpression(
                                 Literal(100),
                                 BinaryExpression.Operator.MOD,
                                 Literal(3)
-                        )))
+                            )
+                        )
+                    )
                 )
-        ))
+            )
+        )
 
         val expected = """
             2 3 9
@@ -84,30 +94,34 @@ class InterpreterTest {
     fun testInterpretWhile() {
         val output = StringBuilder()
         val stl = mockedStl(output)
-        val block = Block(listOf(
+        val block = Block(
+            listOf(
                 Variable(Identifier("a"), Literal(1)),
                 While(
-                        BinaryExpression(
+                    BinaryExpression(
+                        Identifier("a"),
+                        BinaryExpression.Operator.LT,
+                        Literal(5)
+                    ),
+                    Block(
+                        listOf(
+                            FunctionCall(
+                                Identifier("println"),
+                                Arguments(listOf(Identifier("a")))
+                            ),
+                            Assigment(
                                 Identifier("a"),
-                                BinaryExpression.Operator.LT,
-                                Literal(5)
-                        ),
-                        Block(listOf(
-                                FunctionCall(
-                                        Identifier("println"),
-                                        Arguments(listOf(Identifier("a")))
-                                ),
-                                Assigment(
-                                        Identifier("a"),
-                                        BinaryExpression(
-                                                Identifier("a"),
-                                                BinaryExpression.Operator.PLUS,
-                                                Literal(1)
-                                        )
+                                BinaryExpression(
+                                    Identifier("a"),
+                                    BinaryExpression.Operator.PLUS,
+                                    Literal(1)
                                 )
-                        ))
+                            )
+                        )
+                    )
                 )
-        ))
+            )
+        )
 
         val expected = """
             1
@@ -125,26 +139,30 @@ class InterpreterTest {
     fun testInterpretFunctionCall() {
         val output = StringBuilder()
         val stl = mockedStl(output)
-        val block = Block(listOf(
+        val block = Block(
+            listOf(
                 Function(
-                        Identifier("superPrintln"),
-                        ParameterNames(listOf(Identifier("x"))),
-                        Block(listOf(
-                                FunctionCall(
-                                        Identifier("println"),
-                                        Arguments(listOf(Identifier("x")))
-                                )
-                        ))
+                    Identifier("superPrintln"),
+                    ParameterNames(listOf(Identifier("x"))),
+                    Block(
+                        listOf(
+                            FunctionCall(
+                                Identifier("println"),
+                                Arguments(listOf(Identifier("x")))
+                            )
+                        )
+                    )
                 ),
                 FunctionCall(
-                        Identifier("superPrintln"),
-                        Arguments(listOf(Literal(1)))
+                    Identifier("superPrintln"),
+                    Arguments(listOf(Literal(1)))
                 ),
                 FunctionCall(
-                        Identifier("superPrintln"),
-                        Arguments(listOf(Literal(2)))
+                    Identifier("superPrintln"),
+                    Arguments(listOf(Literal(2)))
                 )
-        ))
+            )
+        )
 
         val expected = """
             1
@@ -160,23 +178,29 @@ class InterpreterTest {
     fun testInterpretIfTrue() {
         val output = StringBuilder()
         val stl = mockedStl(output)
-        val block = Block(listOf(
+        val block = Block(
+            listOf(
                 If(
-                        Literal(1),
-                        Block(listOf(
-                                FunctionCall(
-                                        Identifier("println"),
-                                        Arguments(listOf(Literal(1)))
-                                )
-                        )),
-                        Block(listOf(
-                                FunctionCall(
-                                        Identifier("println"),
-                                        Arguments(listOf(Literal(2)))
-                                )
-                        ))
+                    Literal(1),
+                    Block(
+                        listOf(
+                            FunctionCall(
+                                Identifier("println"),
+                                Arguments(listOf(Literal(1)))
+                            )
+                        )
+                    ),
+                    Block(
+                        listOf(
+                            FunctionCall(
+                                Identifier("println"),
+                                Arguments(listOf(Literal(2)))
+                            )
+                        )
+                    )
                 )
-        ))
+            )
+        )
 
         Interpreter.run(block, stl)
         assertEquals("1\n", output.toString())
@@ -186,23 +210,29 @@ class InterpreterTest {
     fun testInterpretIfFalse() {
         val output = StringBuilder()
         val stl = mockedStl(output)
-        val block = Block(listOf(
+        val block = Block(
+            listOf(
                 If(
-                        Literal(0),
-                        Block(listOf(
-                                FunctionCall(
-                                        Identifier("println"),
-                                        Arguments(listOf(Literal(1)))
-                                )
-                        )),
-                        Block(listOf(
-                                FunctionCall(
-                                        Identifier("println"),
-                                        Arguments(listOf(Literal(2)))
-                                )
-                        ))
+                    Literal(0),
+                    Block(
+                        listOf(
+                            FunctionCall(
+                                Identifier("println"),
+                                Arguments(listOf(Literal(1)))
+                            )
+                        )
+                    ),
+                    Block(
+                        listOf(
+                            FunctionCall(
+                                Identifier("println"),
+                                Arguments(listOf(Literal(2)))
+                            )
+                        )
+                    )
                 )
-        ))
+            )
+        )
 
         Interpreter.run(block, stl)
         assertEquals("2\n", output.toString())
@@ -212,9 +242,11 @@ class InterpreterTest {
     fun testInterpretExceptionNoVariable() {
         val output = StringBuilder()
         val stl = mockedStl(output)
-        val block = Block(listOf(
+        val block = Block(
+            listOf(
                 Assigment(Identifier("a"), Literal(4))
-        ))
+            )
+        )
 
         Interpreter.run(block, stl)
     }
@@ -223,9 +255,11 @@ class InterpreterTest {
     fun testInterpretExceptionNoFunction() {
         val output = StringBuilder()
         val stl = mockedStl(output)
-        val block = Block(listOf(
+        val block = Block(
+            listOf(
                 FunctionCall(Identifier("abacaba"), Arguments(emptyList()))
-        ))
+            )
+        )
 
         Interpreter.run(block, stl)
     }
@@ -234,10 +268,12 @@ class InterpreterTest {
     fun testInterpretExceptionDeclaredTwice() {
         val output = StringBuilder()
         val stl = mockedStl(output)
-        val block = Block(listOf(
+        val block = Block(
+            listOf(
                 Variable(Identifier("a"), Literal(3)),
                 Variable(Identifier("a"), Literal(4))
-        ))
+            )
+        )
 
         Interpreter.run(block, stl)
     }
@@ -246,27 +282,31 @@ class InterpreterTest {
     fun testInterpretLocalRedeclaration() {
         val output = StringBuilder()
         val stl = mockedStl(output)
-        val block = Block(listOf(
+        val block = Block(
+            listOf(
                 Variable(Identifier("a"), Literal(3)),
                 FunctionCall(
-                        Identifier("println"),
-                        Arguments(listOf(Identifier("a")))
+                    Identifier("println"),
+                    Arguments(listOf(Identifier("a")))
                 ),
                 If(
-                        Literal(1),
-                        Block(listOf(
-                                Variable(Identifier("a"), Literal(4)),
-                                FunctionCall(
-                                        Identifier("println"),
-                                        Arguments(listOf(Identifier("a")))
-                                )
-                        ))
+                    Literal(1),
+                    Block(
+                        listOf(
+                            Variable(Identifier("a"), Literal(4)),
+                            FunctionCall(
+                                Identifier("println"),
+                                Arguments(listOf(Identifier("a")))
+                            )
+                        )
+                    )
                 ),
                 FunctionCall(
-                        Identifier("println"),
-                        Arguments(listOf(Identifier("a")))
+                    Identifier("println"),
+                    Arguments(listOf(Identifier("a")))
                 )
-        ))
+            )
+        )
 
         val expected = """
             3
@@ -283,27 +323,33 @@ class InterpreterTest {
     fun testInterpretExceptionFunctionVisibility() {
         val output = StringBuilder()
         val stl = mockedStl(output)
-        val block = Block(listOf(
+        val block = Block(
+            listOf(
                 If(
-                        Literal(1),
-                        Block(listOf(
-                                Function(
-                                        Identifier("superPrintln"),
-                                        ParameterNames(listOf(Identifier("x"))),
-                                        Block(listOf(
-                                                FunctionCall(
-                                                        Identifier("println"),
-                                                        Arguments(listOf(Identifier("x")))
-                                                )
-                                        ))
+                    Literal(1),
+                    Block(
+                        listOf(
+                            Function(
+                                Identifier("superPrintln"),
+                                ParameterNames(listOf(Identifier("x"))),
+                                Block(
+                                    listOf(
+                                        FunctionCall(
+                                            Identifier("println"),
+                                            Arguments(listOf(Identifier("x")))
+                                        )
+                                    )
                                 )
-                        ))
+                            )
+                        )
+                    )
                 ),
                 FunctionCall(
-                        Identifier("superPrintln"),
-                        Arguments(listOf(Literal(3)))
+                    Identifier("superPrintln"),
+                    Arguments(listOf(Literal(3)))
                 )
-        ))
+            )
+        )
 
         Interpreter.run(block, stl)
     }
