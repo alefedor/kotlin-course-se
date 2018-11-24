@@ -6,7 +6,7 @@ class IndentationWrapper(val level: Int) {
     }
 
     companion object {
-        val INDENTATION = "  ";
+        private val INDENTATION = "  "
     }
 
     fun indent(line: String): String = INDENTATION.repeat(level).plus(line)

@@ -30,7 +30,7 @@ open class CommonElement(wrapper: IndentationWrapper, append: (String) -> Unit) 
     fun customTag(name: String, vararg params: Pair<String, String>, body: CommonElement.() -> Unit) {
         appendIndented("""\begin{$name}""")
 
-        if (!params.isEmpty()) {
+        if (params.isNotEmpty()) {
             append("[")
             for ((key, value) in params) {
                 append("$key=$value")
@@ -47,9 +47,11 @@ open class CommonElement(wrapper: IndentationWrapper, append: (String) -> Unit) 
         endLine()
     }
 
-    fun alignment(alignment: Alignment, body: CommonElement.() -> Unit) = customTag(alignment.alignment) {
-                                                           body()
-                                                       }
+    fun alignment(alignment: Alignment, body: CommonElement.() -> Unit) =
+        customTag(alignment.alignment) {
+            body()
+        }
+    
     fun frame(frameTitle: String, vararg params: Pair<String, String>, body: CommonElement.() -> Unit) {
         customTag("frame", *params) {
             appendIndented("""\frametitle{$frameTitle}""")
@@ -108,7 +110,7 @@ class TexElement(val append: (String) -> Unit): Element {
 
     fun usepackage(name: String, vararg params: String) {
         append("""\usepackage""")
-        if (!params.isEmpty()) {
+        if (params.isNotEmpty()) {
             append(params.joinToString(",", "[", "]"))
         }
 
